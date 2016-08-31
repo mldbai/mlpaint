@@ -1,0 +1,147 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MNIST demo</title>
+  <meta name="description" content="MNIST demo">
+  <meta name="author" content="Jonathan Pilault and Hao Deng">
+    <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+    <script src="sketch.js" ></script>
+</head>
+
+<body>
+    <style>
+        .bg-1{
+            background-color: #474e5d;
+            color: #ffffff;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 2%;
+            margin-left: -15px;
+            margin-right: -15px;
+        }
+        
+        .bg-1 p {
+            font-size: 16px;
+        }
+
+        #samples {
+            width: 65%;
+            padding-top: 15px;
+        }
+
+        .sample_images {
+            margin: 2%;
+            margin-left: 0;
+        }
+
+        .hide {
+            display: none;
+        }
+
+    </style>
+    <div class="container container-fluid">
+        <div class="bg-1 text-center">
+            <h1>Handwritten Digit Recognizer <br><small> Trained with the MNIST dataset</small> </h1>
+            <p>Welcome to the Handwritten Digit Recognizer demo. The following MLDB plug-in recognizes digits entered in the dotted blueish-purple box below. The models are trained with digits between 0-9 and will attempt to understand values in that range. You can hit submit to see what the model predicts and how it "explains" the prediction!</p>
+        </div>
+        <div class="row">
+            <div class="col-xs panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Let's first choose a Machine Learning model:    
+                        <select id='model' style=" width: 250px; display: inline-block" class="form-control" data-target=".listAttribute" onchange='submit()'>
+                            <option value='bbdt_d5' data-show=".randomForest">Random Forest</option>
+                            <option value='bglz' data-show=".bglz">Bagged Random L2 Linear Regression</option>
+                            <!--option value='glz' data-show=".glz">L1 Logistic Regression</option-->
+                            <option value='bbs2' data-show=".bbs2">Bagged Boosted Stumps</option>
+                            <option value='dt' data-show=".dt">Plain Decision Tree</option>
+                        </select>
+                    </h4>
+                    <div class="listAttribute">
+                        <div class="randomForest"> 
+                            The Random Forest was one of the best 'classical' Machine Learning models that we used. 
+                            The explain that we got is a little busy but that's because there are most leafs that contribute to the final result.
+                            Centering and resizing the MNIST test images does little to improve the prediction.
+                        </div>
+                        <div class="bglz"> 
+                            The Bagged Random L2 Linear Regression is good at learning the manifolds of each digit. 
+                            The final accuracy was not the best out the 'classical' Machine Learning models.
+                            Centering and resizing the MNIST test images really improves our prediction.
+                        </div>
+                        <div class="bbs2"> 
+                            The Bagged Boosted Stumps model was the second best 'classical' Machine Learning model that we have used.
+                            More pixels are used in the final decision probability compared to the Plain Decision Tree but less than the Random Forest - Makes sense!
+                            Centering and resizing the MNIST test images really improves our prediction.
+                        </div>
+                        <div class="dt"> 
+                            We had to do a Plain Decision Tree just to see the differences with other models.
+                            The interesting thing to not here in the 'explain' respresentation is that very few leafs contribute to the final prediction.
+                            This makes the Plain Decision Tree very sensitive to the input drawing and to centering and resizing of images.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class = "col-xs panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        Let's now send a hand drawn digit between 0 and 9 to our trained model - you can draw the digit yourself or choose an image from the MNIST test dataset.
+                    </h4>
+                </div>
+                <div class="tools panel-body" style="float: left; width: 50%; clear: none; padding-bottom: 1px;">
+                    Draw a digit from 0 to 9 <br><br>
+                    <a href='#sketch' class='btn colorbtn' id='btn0' data-size='20' data-tool='marker' data-color='rgba(0,0,0, 0.5)'
+                        style='width: 30px; height: 30px; border: 1px solid #888; background: rgba(0,0,0,0.5);'> </a> <!--rgba(0,0,255,0.5)-->
+                    <a href='#sketch' class='btn colorbtn' id='btn1' data-size='20' data-tool='eraser'  
+                        style='width: 30px; height: 30px; border: 1px solid #888; background: #fff;'> </a>
+                    <button onclick="erase()" class="btn btn-danger" style=" ">Erase</button>
+                    <input type="submit" class="btn btn-primary" onclick="submit()">
+                    <div style="width: 250px; margin-bottom: 2px; float: right;">
+                        <div class="form-group checkbox" style="display: inline-block; margin: 0px;">
+                            <label>
+                                <input type="checkbox" id="check_center" onclick='submit()'> Center based on centroid and resize image similarly to MNIST data <br>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="tools panel-body" style="float: right; width: 50%; clear: none;">
+                    Click on an image <br><br>
+                    <input type="button" class="btn " value="Retrieve new MNIST images" onclick="retrieve()">
+                    <div id="samples" style="margin-top: 1%"></div>
+                </div>
+                <canvas id='sketch' width=224 height=224 style="border:4px dotted #88f; margin: 2px; margin-left: 15px;" onmouseup="submit()"></canvas>
+                <canvas id='sketch_transform' width=28 height=28 style="border:1px solid #000; margin-top: 15px;"></canvas>
+                <canvas id='standard_canvas' width=28 height=28 style="border:1px solid #000; margin-top: 15px; margin-left: 1%; display: none;"></canvas>
+
+            </div>
+            <div class="col-xs panel panel-default">
+                <div class="panel-heading">
+                        Our results: Drawings below represent the "explain" matrix for each digit. The colors represent the degree to which a particular pixel contributed to the final prediction. Red pixels contribute negatively to the final prediction while green pixels contribute positively. If we choose or draw digit "1", we should see more green dots in the explain drawing for number "1" when compared to other numbers. The bar graphs provides the model's expectation that the digits correspond to any number between 0 and 9.
+                </div>
+                <div class="tools panel-body">
+                    <div class="row" id="row1"> </div>
+                    <div class="row" id="row2"> </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+          $(function() {
+              $('#sketch').sketch();
+              $('#btn0').click();
+          });
+    </script>
+    <script src="entry.js"></script>
+</body>
+</html>
