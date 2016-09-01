@@ -11,7 +11,7 @@ Try *MLPaint* for free! Just create a [free MLDB.ai account](https://mldb.ai/#si
 
 ### Installing MLPaint
 
-You can either run the [Recognizing Handwritten Digits demo](https://docs.mldb.ai/ipy/notebooks/_demos/_latest/Real-Time%20Digits%20Recognizer.html), which installs the plugin.
+One way is to the [Recognizing Handwritten Digits demo](https://docs.mldb.ai/ipy/notebooks/_demos/_latest/Real-Time%20Digits%20Recognizer.html) notebook from a running instance of MLDB.
 
 Alternatively, from a notebook running on MLDB, run the following:
 
