@@ -8,3 +8,23 @@ Some links:
 - The [Recognizing Handwritten Digits demo](https://docs.mldb.ai/ipy/notebooks/_demos/_latest/Real-Time%20Digits%20Recognizer.html) explains the machine learning behind MLPaint
 
 Try *MLPaint* for free! Just create a [free MLDB.ai account](https://mldb.ai/#signup) to launch an instance and run the [Recognizing Handwritten Digits demo](https://docs.mldb.ai/ipy/notebooks/_demos/_latest/Real-Time%20Digits%20Recognizer.html) from within your MLDB instance.
+
+### Installing MLPaint
+
+You can either run the [Recognizing Handwritten Digits demo](https://docs.mldb.ai/ipy/notebooks/_demos/_latest/Real-Time%20Digits%20Recognizer.html), which installs the plugin.
+
+Alternatively, from a notebook running on MLDB, run the following:
+
+```python
+from pymldb import Connection
+mldb = Connection()
+
+mldb.put("/v1/plugins/mlpaint", {
+    "type": "python",
+    "params": {
+        "address": "git://github.com/mldbai/mlpaint"
+    }
+})
+```
+
+You can then browse to `https://<host:port>/v1/plugins/mlpaint/routes/static/index.html` to access the UI.
