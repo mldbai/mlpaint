@@ -5,6 +5,7 @@ MLPaint is an MLDB.ai plugin that does real-time handwritten digit recognition. 
 Some links:
 
 - [Youtube demo](https://www.youtube.com/watch?v=WGdLCXDiDSo)
+- [MLPaint blog post](http://blog.mldb.ai/blog/posts/2016/09/mlpaint/)
 - The [Recognizing Handwritten Digits demo](https://docs.mldb.ai/ipy/notebooks/_demos/_latest/Real-Time%20Digits%20Recognizer.html) explains the machine learning behind MLPaint
 
 Try *MLPaint* for free! Just create a [free MLDB.ai account](https://mldb.ai/#signup) to launch an instance and run the [Recognizing Handwritten Digits demo](https://docs.mldb.ai/ipy/notebooks/_demos/_latest/Real-Time%20Digits%20Recognizer.html) from within your MLDB instance.
